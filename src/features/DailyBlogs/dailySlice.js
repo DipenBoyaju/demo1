@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
-export const counterSlice = createSlice({
+
+export const dailySlice = createSlice({
   name: 'dailySlice',
 
   initialState: {
@@ -8,8 +9,23 @@ export const counterSlice = createSlice({
   },
 
   reducers: {
+    addToBLogs: (state, action) => {
+      state.blogs = [...state.blogs, action.payload];
+    },
+    updateToBLogs: (state, action) => {
+
+    },
+    removeBLogs: (state, action) => {
+
+    },
+
 
   },
-})
 
-export const { } = counterSlice.actions
+
+
+});
+
+
+export const { addToBLogs, updateToBLogs, removeBLogs } = dailySlice.actions;
+
