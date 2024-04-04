@@ -4,6 +4,7 @@ import Home from "./features/Home"
 import About from "./features/About"
 import Contact from "./features/Contact"
 import CountView from "./features/counter/CountView"
+import DailyForm from "./features/DailyBlogs/DailyForm"
 
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         { path: 'about', element: <About /> },
         { path: 'contact', element: <Contact /> },
         { path: 'counter', element: <CountView /> },
+        { path: 'dailyform', element: <DailyForm /> },
       ]
     }
   ])
