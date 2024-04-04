@@ -1,30 +1,11 @@
-import { Button } from "@material-tailwind/react"
-import { useSelector, useDispatch } from "react-redux"
-import { decrement, increment } from "./counter/counterSlice";
-import { decre, incre, reset } from "./counter/Counter1Slice";
+import { Link } from "react-router-dom"
 
 const Home = () => {
-
-  const dispatch = useDispatch();
-
-  const { count } = useSelector((state) => state.counterSlice);
-  const { count1 } = useSelector((state) => state.counterSlice1)
-  console.log(count);
-  console.log(count1);
   return (
-    <div>
-      <div className="p-4">
-        <h1 className="uppercase text-center p-4 font-bold">Counter</h1>
-        <Button ripple={true} onClick={() => dispatch(reset())}>Reset</Button>
-        <h1>This is count State</h1>
-        <h2>{count}</h2>
-        <Button ripple="true" size="sm" className="bg-green-400" onClick={() => dispatch(increment())}>Increment</Button>
-        <Button ripple={true} size="sm" className="bg-red-400" onClick={() => dispatch(decrement())}>Decrement</Button>
-        <h1>This is Count1 State</h1>
-        <h2>{count1}</h2>
-        <Button ripple={true} size="sm" className="bg-indigo-400" onClick={() => dispatch(incre())}>Increment</Button>
-        <Button ripple={true} size="sm" className="bg-pink-300" onClick={() => dispatch(decre())}>Decrement</Button>
-      </div>
+    <div className="text-center mx-auto">
+      <ul className="mx-auto">
+        <Link to='/counter'><li className="p-3 border-2 border-indigo-400 w-1/2 rounded-3xl font-bold uppercase hover:bg-indigo-400 cursor-pointer hover:text-white transition-all">Counter</li></Link >
+      </ul>
     </div>
   )
 }
