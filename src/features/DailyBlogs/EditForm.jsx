@@ -9,15 +9,20 @@ import {
   Select,
   Textarea,
 } from "@material-tailwind/react";
-import { nanoid } from "@reduxjs/toolkit";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { addToBLogs } from "./dailySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { updateToBLogs } from "./dailySlice";
 import { useNavigate } from "react-router";
 import * as Yup from 'yup'
+import { useParams } from "react-router-dom";
 
 
-const DailyForm = () => {
+const EditForm = () => {
+
+  const { id } = useParams();
+  const { blogs } = useSelector((state) => state.dailySlice)
+  const blog = blogs.find((blog) => blog.id === id)
+  console.log(id);
 
   const dispatch = useDispatch();
   const nav = useNavigate();
@@ -29,12 +34,12 @@ const DailyForm = () => {
     hobbies: Yup.array().min(1).required('Required'),
     country: Yup.string().required('Required'),
     detail: Yup.string().required('Required'),
-    image: Yup.mixed().test('fileType', 'Please provide proper image', (val) => {
-      const photos = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
-      return val && photos.includes(val.type);
-    }).test('fileSize', 'file too large', (val) => {
-      return val && val.size <= 1024 * 1024 * 2;
-    }),
+    // image: Yup.mixed().test('fileType', 'Please provide proper image', (val) => {
+    //   const photos = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+    //   return val && photos.includes(val.type);
+    // }).test('fileSize', 'file too large', (val) => {
+    //   return val && val.size <= 1024 * 1024 * 2;
+    // }),
 
   })
 
@@ -42,18 +47,18 @@ const DailyForm = () => {
   const { values, handleChange,
     handleSubmit, setFieldValue, errors, touched } = useFormik({
       initialValues: {
-        title: '',
-        email: '',
-        place: '',
-        hobbies: [],
-        country: '',
-        detail: '',
+        title: blog.title,
+        email: blog.email,
+        place: blog.place,
+        hobbies: blog.hobbies,
+        country: blog.country,
+        detail: blog.detail,
         image: null,
-        imagePreview: null
+        imagePreview: blog.imagePreview
       },
       onSubmit: (val) => {
         // dispatch(addToBLogs({ ...val, id: nanoid() }));
-        dispatch(addToBLogs({
+        dispatch(updateToBLogs({
           title: val.title,
           email: val.email,
           place: val.place,
@@ -61,7 +66,7 @@ const DailyForm = () => {
           country: val.country,
           detail: val.detail,
           imagePreview: val.imagePreview,
-          id: nanoid()
+          id: blog.id
         }
         ))
         // nav(-1); (it returns to the previous page ypu came from)
@@ -96,6 +101,7 @@ const DailyForm = () => {
 
           <div className="">
             <Input
+              value={values.title}
               onChange={handleChange}
               size="lg"
               label="Title"
@@ -105,6 +111,7 @@ const DailyForm = () => {
           </div>
           <div className="">
             <Input
+              value={values.email}
               size="lg"
               label="Email"
               name="email"
@@ -118,6 +125,8 @@ const DailyForm = () => {
             <div className="flex gap-10">
               {radioData.map((rad, i) => {
                 return <Radio key={i} label={rad.label}
+                  // checked={values.place}
+                  checked={rad.value === values.place}
                   onChange={handleChange}
                   color={rad.color}
                   value={rad.value}
@@ -133,6 +142,7 @@ const DailyForm = () => {
               {checkData.map((rad, i) => {
                 return <Checkbox
                   key={i}
+                  checked={values.hobbies.includes(rad.value)}
                   label={rad.label}
                   onChange={handleChange}
                   color={rad.color}
@@ -144,6 +154,7 @@ const DailyForm = () => {
 
           <div className="">
             <Select
+              value={values.country}
               onChange={(e) => setFieldValue('country', e)}
               name="country"
               label="Select Country">
@@ -156,6 +167,7 @@ const DailyForm = () => {
           </div>
           <div className="w-96">
             <Textarea
+              value={values.detail}
               name="detail"
               onChange={handleChange}
               label="Description" />
@@ -189,11 +201,11 @@ const DailyForm = () => {
         </div>
 
         <Button type="submit" className="mt-6" fullWidth>
-          Submit
+          Update
         </Button>
 
       </form>
     </Card >
   )
 }
-export default DailyForm
+export default EditForm
